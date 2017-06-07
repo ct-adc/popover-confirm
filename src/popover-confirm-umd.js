@@ -1,5 +1,5 @@
 /*!
- * v1.3.0
+ * v1.2.1
  * 
  * Copyright 2016 Live
  * Licensed MIT
