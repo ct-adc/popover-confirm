@@ -75,7 +75,7 @@ define(function() {
 		},
 		_confirm: function() { // 确认操作
 			var _this = this,
-				ajaxObj = {
+				ajaxConfig = {
 					type: _this.conf.ajax.type,
 					url: _this.conf.ajax.url,
 					data: _this.conf.ajax.data, 
@@ -87,22 +87,17 @@ define(function() {
 						_this.conf.ajax.callback( res );
 					},
 					error: function(error) {
+						_this.destroy();
 						alert( '网络错误或登录失效，请刷新重试或重新登录！' );
 					}
 				};
 
+			$.extend( ajaxConfig, _this.conf.ajax.config );
 
 			toggleBtnDisableAttr( _this.conf.$trigger );
 			_this._setSubmitStatus( 'loading');
 
-			if ( _this.conf.ajax.type.toLocaleLowerCase() === 'post' ) {
-				$.extend( ajaxObj, {
-					contentType: 'application/json;charset=utf-8',
-					dataType: 'json'
-				} );
-			}
-
-			$.ajax( ajaxObj );
+			$.ajax( ajaxConfig );
 		},
 		_bind: function() { // 点击 popoover 本身阻止冒泡，这样不会传递到 document 上而关闭 popover（见方法 bindBase）
 			var _this = this;

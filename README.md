@@ -30,19 +30,22 @@ function showUpdateStatusConfirm( e, index, data ) {
 function show( $trigger, index, data ) {
     var _this = this;
     var handleName = data.status === 1 ? '启用' : '禁用';
-  
+    
     PopoverConfirm.init({
         UID: data.id, // 数据中唯一标识符，比如 ID，UserID 等，以确保重复点击显示、隐藏不会闪烁
         title: '确定'+ handleName +'？',
         loadingContent: handleName + '生效中.........', // Popover 加载中提示文字
         $trigger: $trigger, // 触发者
-        ajax: { // ajax 配置
-            type: 'post',
-            url: URL.changeStatus,
-            data: data,
-            callback: function( res ) { // success
-                if ( res.Status ) { // 成功
-                    // 消息弱提示
+        ajax: {
+            config: { // ajax 配置
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                url: URL.changeStatus,
+                data: data,
+            }, // success 回调函数
+            callback: function( res ) {
+                if ( res.Status ) {
                     const miniMsg = new MiniMsg({
                         content: handleName + '成功',
                         duration: 2,
@@ -54,8 +57,7 @@ function show( $trigger, index, data ) {
                     miniMsg.animation(() => {
                         avalon.vmodels.main.data[ index ].Status = data.status; // 更改数据状态
                     });
-                } else { // 失败
-                    // 消息弱提示
+                } else {
                     const miniMsg = new MiniMsg({
                         content: res.Message,
                         duration: 3,
@@ -63,7 +65,7 @@ function show( $trigger, index, data ) {
                         type: 'error'
                     });
 
-                    PopoverConfirm.hide(); // 隐藏
+                    PopoverConfirm.hide();
                     miniMsg.animation();
                 }
             }

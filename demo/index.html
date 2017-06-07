@@ -11,6 +11,7 @@
     </style>
 </head>
 <body>
+
 <div class="container-fluid ms-controller" ms-controller="main">
     <div class="panel panel-default">
         <table class="table table-bordered table-striped table-hover table-condensed">
@@ -20,7 +21,7 @@
                     <th>子活动类型</th>
                     <th>子活动ID</th>
                     <th>状态</th>
-                    <th style="width: 120px;">操作</th>
+                    <th style="width: 70px;">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,10 +39,6 @@
                             <i class="glyphicon glyphicon-remove-sign" ms-if="el.Status == 1"></i>
                             {{ el.Status == 0 ? '启用' : '禁用'}}
                         </button>
-                        <button type="button" class="btn btn-xs btn-primary">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                            编辑
-                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -56,7 +53,7 @@
 <script src="http://static.uc108.com/cdn/avalon/1.5.6/avalon.shim.min.js"></script>
 <script src="http://static.uc108.com/cdn/require/2.1.22/require.js"></script>
 <script>
-require(['../src/popover-confirm.js'], function(PopoverConfirm) {
+    require(['../src/popover-confirm.js'], function(PopoverConfirm) {
 
     var VM = null, 
         URL = null,
@@ -102,9 +99,13 @@ require(['../src/popover-confirm.js'], function(PopoverConfirm) {
                 loadingContent: handleName + '生效中.........', // Popover 加载中提示文字
                 $trigger: $trigger, // 触发者
                 ajax: {
-                    type: 'post',
-                    url: URL.changeStatus,
-                    data: data,
+                    config: {
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        url: URL.changeStatus,
+                        data: data,
+                    },
                     callback: function( res ) {
                         if ( res.Status ) {
                             const miniMsg = new MiniMsg({
