@@ -40,7 +40,7 @@ function show( $trigger, index, data ) {
             type: 'post',
             url: URL.changeStatus,
             data: data,
-            callback: function( res ) {
+            callback: function( res ) { // success
                 if ( res.Status ) { // 成功
                     // 消息弱提示
                     const miniMsg = new MiniMsg({
