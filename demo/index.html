@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>Popover Confirm Demo</title>
+    <link rel="stylesheet" href="http://static.tcy365.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://static.tcy365.com/cdn/bootstrap/3.3.5/css/theme.css">
+    <link rel="stylesheet" href="http://static.tcy365.com/cdn/component/miniMsg/1.4.0/src/css/miniMsg.css">
+    <style type="text/css">
+        [ms-controller] { visibility:hidden; }
+    </style>
+</head>
+<body>
+<div class="container-fluid ms-controller" ms-controller="main">
+    <div class="panel panel-default">
+        <table class="table table-bordered table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>子活动名称</th>
+                    <th>子活动类型</th>
+                    <th>子活动ID</th>
+                    <th>状态</th>
+                    <th style="width: 120px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ms-repeat="data">
+                    <td>{{ el.Name }}</td>
+                    <td>{{ el.Kind }}</td>
+                    <td>{{ el.Id }}</td>
+                    <td class="text-success" ms-class="text-danger : el.Status == 0">{{ el.Status == 0 ? '已禁用' : '已启用' }}</td>
+                    <td>
+                        <button type="button" class="btn btn-xs btn-success"
+                            ms-class="btn-danger : el.Status == 1"
+                            ms-click="showUpdateStatusConfirm(event, $index, { id: el.Id, status: el.Status == 0 ? 1 : 0 })"
+                        >
+                            <i class="glyphicon glyphicon-ok-sign" ms-if="el.Status == 0"></i>
+                            <i class="glyphicon glyphicon-remove-sign" ms-if="el.Status == 1"></i>
+                            {{ el.Status == 0 ? '启用' : '禁用'}}
+                        </button>
+                        <button type="button" class="btn btn-xs btn-primary">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            编辑
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="http://static.tcy365.com/cdn/jquery/2.1.0/jquery.js"></script>
+<script src="http://static.tcy365.com/cdn/bootstrap-page/2.0.0/page.min.js"></script>
+<script src="http://static.tcy365.com/cdn/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://static.tcy365.com/cdn/component/miniMsg/1.4.0/src/js/miniMsg.js"></script>
+<script src="http://static.uc108.com/cdn/avalon/1.5.6/avalon.shim.min.js"></script>
+<script src="http://static.uc108.com/cdn/require/2.1.22/require.js"></script>
+<script>
+require(['../src/popover-confirm.js'], function(PopoverConfirm) {
+
+    var VM = null, 
+        URL = null,
+        Main = null,
+        Status = null;
+
+    // ajax 地址
+    URL = {
+        changeStatus: '/api/subActivity/changeSubActivityStatus' // 更改启用、禁用状态 POST
+    };
+
+    // avalon vm
+    VM = avalon.define({
+        $id: 'main',
+        data: [
+            {
+                Kind: '抽奖活动',
+                Name: '捕鱼达人单次抽奖',
+                Id: 1,
+                Status: 1
+            }, {
+                Kind: '每日签到',
+                Name: '欢乐斗地主',
+                Id: 2,
+                Status: 0
+            }
+        ],
+        showUpdateStatusConfirm: function(e, index, data) {
+            e.stopPropagation();
+            Status.show( $(this), index, data);
+        }
+    });
+
+    // 状态
+    Status = {
+        show: function( $trigger, index, data ) {
+            var _this = this;
+            var handleName = data.status === 1 ? '启用' : '禁用';
+            
+            PopoverConfirm.init({
+                UID: data.id, // 数据中唯一标识符，比如 ID，UserID 等，以确保重复点击显示、隐藏不会闪烁
+                title: '确定'+ handleName +'？',
+                loadingContent: handleName + '生效中.........', // Popover 加载中提示文字
+                $trigger: $trigger, // 触发者
+                ajax: {
+                    type: 'post',
+                    url: URL.changeStatus,
+                    data: data,
+                    callback: function( res ) {
+                        if ( res.Status ) {
+                            const miniMsg = new MiniMsg({
+                                content: handleName + '成功',
+                                duration: 2,
+                                container: $('body'),
+                                type: 'success'
+                            });
+
+                            PopoverConfirm.destroy(); // 销毁
+                            miniMsg.animation(() => {
+                                avalon.vmodels.main.data[ index ].Status = data.status; // 更改数据状态
+                            });
+                        } else {
+                            const miniMsg = new MiniMsg({
+                                content: res.Message,
+                                duration: 3,
+                                container: $('body'),
+                                type: 'error'
+                            });
+
+                            PopoverConfirm.hide();
+                            miniMsg.animation();
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    // 主函数
+    Main = {
+        init: function() {
+            this.bind();
+            this.initWatch();
+            this.setFilters();
+
+            avalon.scan();
+        },
+        bind: function() {
+        },
+        initWatch: function() {
+        },
+        setFilters: function() {
+        }
+    };
+
+    Main.init();
+});
+</script>
+</body>
+</html>
