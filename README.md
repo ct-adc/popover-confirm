@@ -3,7 +3,7 @@
 
 # Demo
 
-打开本地模拟 server
+使用 Node 开启本地模拟 server
 ```
 node server e
 ```
@@ -19,8 +19,9 @@ http://localhost:8000/demo/index.html
 ```javascript
 // ...
 
+// 这个方法不写也行，可以在 show 方法里面合并
 function showUpdateStatusConfirm( e, index, data ) {
-    e.stopPropagation();
+    e.stopPropagation(); // 终止事件在传播过程的捕获、目标处理或起泡阶段进一步传播
     show( $(this), index, data);
 }
 
@@ -40,7 +41,8 @@ function show( $trigger, index, data ) {
             url: URL.changeStatus,
             data: data,
             callback: function( res ) {
-                if ( res.Status ) {
+                if ( res.Status ) { // 成功
+                    // 消息弱提示
                     const miniMsg = new MiniMsg({
                         content: handleName + '成功',
                         duration: 2,
@@ -52,7 +54,8 @@ function show( $trigger, index, data ) {
                     miniMsg.animation(() => {
                         avalon.vmodels.main.data[ index ].Status = data.status; // 更改数据状态
                     });
-                } else {
+                } else { // 失败
+                    // 消息弱提示
                     const miniMsg = new MiniMsg({
                         content: res.Message,
                         duration: 3,
