@@ -43,8 +43,8 @@ function show( $trigger, index, data ) {
                 contentType: 'application/json;charset=utf-8',
                 url: URL.changeStatus,
                 data: data,
-            }, // success 回调函数
-            callback: function( res ) {
+            },
+            callback: function( res ) { // success 回调函数
                 if ( res.Status ) {
                     const miniMsg = new MiniMsg({
                         content: handleName + '成功',
