@@ -1,10 +1,10 @@
 /*!
- * v1.2.0
+ * v1.3.0
  * 
  * Copyright 2016 Live
  * Licensed MIT
  * 
- * Date: 2016-12-15 16:42:27
+ * Date: 2017-03-28
  */
 
 
@@ -141,7 +141,7 @@
 
 			_options.$trigger.popover({
 				html: true,
-				placement: 'left',
+				placement: _options.placement || 'left',
 				trigger: 'manual',
 				title: _options.title,
 				content: CONFIRM_TPL

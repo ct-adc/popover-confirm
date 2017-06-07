@@ -1,9 +1,10 @@
-/**
- * @Author:	  Live
- * @Email:       ivill@live.com
- * @DateTime:	2016-11-03 13:59:03
- * @Description: popover 二次确认框
- * @Require: [JQuery, Bootstrap]
+/*!
+ * v1.3.0
+ * 
+ * Copyright 2016 Live
+ * Licensed MIT
+ * 
+ * Date: 2017-03-28
  */
 
 define(function() {
@@ -131,7 +132,7 @@ define(function() {
 
 			_options.$trigger.popover({
 				html: true,
-				placement: 'left',
+				placement: _options.placement || 'left',
 				trigger: 'manual',
 				title: _options.title,
 				content: CONFIRM_TPL
