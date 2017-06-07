@@ -36,7 +36,7 @@ function show( $trigger, index, data ) {
         title: '确定'+ handleName +'？',
         loadingContent: handleName + '生效中.........', // Popover 加载中提示文字
         $trigger: $trigger, // 触发者
-        ajax: {
+        ajax: { // ajax 配置
             type: 'post',
             url: URL.changeStatus,
             data: data,
