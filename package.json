@@ -1,7 +1,7 @@
 {
   "name": "popover-confirm",
   "description": "基于 Bootstrap，依赖 jQuery 的二次确认弱弹框",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "live",
   "private": false,
   "scripts": {

@@ -30,7 +30,7 @@ function showUpdateStatusConfirm( e, index, data ) {
 function show( $trigger, index, data ) {
     var _this = this;
     var handleName = data.status === 1 ? '启用' : '禁用';
-    
+
     PopoverConfirm.init({
         UID: data.id, // 数据中唯一标识符，比如 ID，UserID 等，以确保重复点击显示、隐藏不会闪烁
         title: '确定'+ handleName +'？',
@@ -48,7 +48,7 @@ function show( $trigger, index, data ) {
                 if ( res.Status ) {
                     const miniMsg = new MiniMsg({
                         content: handleName + '成功',
-                        duration: 2,
+                        duration: 1,
                         container: $('body'),
                         type: 'success'
                     });
@@ -58,15 +58,11 @@ function show( $trigger, index, data ) {
                         avalon.vmodels.main.data[ index ].Status = data.status; // 更改数据状态
                     });
                 } else {
-                    const miniMsg = new MiniMsg({
-                        content: res.Message,
-                        duration: 3,
-                        container: $('body'),
-                        type: 'error'
+                    // 可以设置错误信息提示
+                    PopoverConfirm.setContent({
+                        title: '操作失败',
+                        content: '<span class="text-danger">'+ res.Message +'</span>'
                     });
-
-                    PopoverConfirm.hide();
-                    miniMsg.animation();
                 }
             }
         }
