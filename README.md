@@ -71,3 +71,5 @@ function show( $trigger, index, data ) {
 
 // ...
 ```
+
+# [更新日志](https://github.com/ct-adc/popover-confirm/blob/master/CHANGELOG.md)
