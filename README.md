@@ -1,3 +1,5 @@
+本组件不再维护，请使用vue组件[ct-adc-popperover](https://github.com/ct-adc/adc-popperover)
+
 # popover-confirm
 基于 Bootstrap，依赖 jQuery 的二次确认弱弹框
 
